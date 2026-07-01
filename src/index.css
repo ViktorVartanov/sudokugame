@@ -116,6 +116,14 @@ body {
 #root {
   min-height: 100vh;
   isolation: isolate;
+  /* iOS standalone mode has no browser chrome reserving space for the notch/
+     Dynamic Island or the home indicator, since the status bar is set to
+     `black-translucent` (transparent, overlaying content) for a nicer look.
+     Push all in-flow content in from those unsafe edges ourselves. */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 * {
