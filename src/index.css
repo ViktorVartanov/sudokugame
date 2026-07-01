@@ -1,0 +1,153 @@
+@import 'tailwindcss';
+
+/* Enable class-based dark mode (Tailwind v4 defaults to prefers-color-scheme) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Lexend', 'Inter', system-ui, sans-serif;
+
+  --color-brand-50: #f2f1ff;
+  --color-brand-100: #e6e4ff;
+  --color-brand-200: #cfccff;
+  --color-brand-300: #aca4ff;
+  --color-brand-400: #8b7bff;
+  --color-brand-500: #7057ff;
+  --color-brand-600: #5c3af0;
+  --color-brand-700: #4c2bd0;
+  --color-brand-800: #3f26a8;
+  --color-brand-900: #352284;
+
+  --color-accent-50: #eefcf7;
+  --color-accent-400: #34e0a1;
+  --color-accent-500: #16c98a;
+  --color-accent-600: #0ea975;
+
+  --animate-pop: pop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-shake: shake 0.4s ease-in-out;
+  --animate-fade-in: fade-in 0.35s ease-out;
+  --animate-fade-up: fade-up 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scale-in: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-view-in: view-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-cell-in: cell-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  --animate-float: float 3.2s ease-in-out infinite;
+  --animate-glow: glow 2.4s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 12s linear infinite;
+  --animate-gradient-x: gradient-x 6s ease infinite;
+  --animate-count-in: count-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+
+  @keyframes pop {
+    0% { transform: scale(0.6); opacity: 0; }
+    60% { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+  @keyframes view-in {
+    from { opacity: 0; transform: translateY(8px) scale(0.995); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes cell-in {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 0 rgba(245, 158, 11, 0); }
+    50% { box-shadow: 0 0 45px 8px rgba(245, 158, 11, 0.45); }
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes gradient-x {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes count-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+html {
+  color-scheme: light dark;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  @apply bg-slate-100 text-slate-900 dark:bg-[#0b0e1a] dark:text-slate-100;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  @apply bg-brand-400/30;
+}
+
+/* Slim, unobtrusive scrollbars that still respect the theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700;
+  border-radius: 999px;
+}
+
+.bg-noise {
+  background-image: radial-gradient(circle at 1px 1px, rgba(120, 113, 198, 0.15) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+.bg-gradient-size-200 {
+  background-size: 200% 200%;
+}
+
+.bg-radial-glow {
+  background-image: radial-gradient(circle at 50% 30%, rgba(245, 158, 11, 0.25), transparent 60%);
+}
