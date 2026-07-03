@@ -87,6 +87,41 @@ export function countCorrectlyPlaced(board: Board, solution: Grid, digit: number
   return count;
 }
 
+export function getBoxIndex(row: number, col: number): number {
+  return Math.floor(row / 3) * 3 + Math.floor(col / 3);
+}
+
+export function getBoxCells(boxIndex: number): CellPositionLike[] {
+  const boxRow = Math.floor(boxIndex / 3) * 3;
+  const boxCol = (boxIndex % 3) * 3;
+  const cells: CellPositionLike[] = [];
+  for (let r = boxRow; r < boxRow + 3; r++) {
+    for (let c = boxCol; c < boxCol + 3; c++) {
+      cells.push({ row: r, col: c });
+    }
+  }
+  return cells;
+}
+
+interface CellPositionLike {
+  row: number;
+  col: number;
+}
+
+/** True when every cell in the given 3x3 box holds its correct solution digit. */
+export function isBoxComplete(board: Board, solution: Grid, boxIndex: number): boolean {
+  return getBoxCells(boxIndex).every(({ row, col }) => board[row][col].value === solution[row][col]);
+}
+
+/** Returns the indices (0-8) of every 3x3 box that is fully and correctly filled. */
+export function getCompletedBoxes(board: Board, solution: Grid): number[] {
+  const completed: number[] = [];
+  for (let box = 0; box < 9; box++) {
+    if (isBoxComplete(board, solution, box)) completed.push(box);
+  }
+  return completed;
+}
+
 export interface StarRatingInput {
   mistakes: number;
   hintsUsed: number;

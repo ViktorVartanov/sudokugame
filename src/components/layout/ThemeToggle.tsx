@@ -1,16 +1,18 @@
 import { Moon, Sun } from 'lucide-react';
 import { useSettingsStore } from '../../store/useSettingsStore';
+import { useT } from '../../lib/i18n';
 import { cn } from '../../lib/utils';
 
 export function ThemeToggle({ className }: { className?: string }) {
   const theme = useSettingsStore((state) => state.theme);
   const toggleTheme = useSettingsStore((state) => state.toggleTheme);
+  const t = useT();
   const isDark = theme === 'dark';
 
   return (
     <button
       onClick={toggleTheme}
-      aria-label="Toggle theme"
+      aria-label={t('theme.toggle')}
       className={cn(
         'relative flex h-11 w-11 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition-all hover:bg-slate-50 active:scale-95 dark:bg-slate-800 dark:ring-slate-700 dark:hover:bg-slate-700/80',
         className,

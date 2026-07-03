@@ -1,8 +1,11 @@
+import { useEffect } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { CheckCircle2, RefreshCw, X, WifiOff } from 'lucide-react';
+import { useT } from '../../lib/i18n';
 import { cn } from '../../lib/utils';
 
 const HOUR_IN_MS = 60 * 60 * 1000;
+const OFFLINE_READY_AUTO_DISMISS_MS = 4500;
 
 /**
  * Registers the service worker and surfaces two states as dismissible toasts:
@@ -10,6 +13,7 @@ const HOUR_IN_MS = 60 * 60 * 1000;
  * "update available" (a new version was precached and is waiting to activate).
  */
 export function PwaStatus() {
+  const t = useT();
   const {
     offlineReady: [offlineReady, setOfflineReady],
     needRefresh: [needRefresh, setNeedRefresh],
@@ -26,6 +30,15 @@ export function PwaStatus() {
       console.error('Service worker registration failed:', error);
     },
   });
+
+  // "Offline ready" is an FYI, not an action — auto-dismiss it so it can't
+  // linger over the header buttons underneath. "Update available" needs an
+  // explicit user choice (Reload), so it stays until dismissed or acted on.
+  useEffect(() => {
+    if (!offlineReady || needRefresh) return;
+    const timeout = setTimeout(() => setOfflineReady(false), OFFLINE_READY_AUTO_DISMISS_MS);
+    return () => clearTimeout(timeout);
+  }, [offlineReady, needRefresh, setOfflineReady]);
 
   if (!offlineReady && !needRefresh) return null;
 
@@ -52,14 +65,14 @@ export function PwaStatus() {
 
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">
-            {needRefresh ? 'Update available' : 'Offline ready'}
+            {needRefresh ? t('pwa.updateAvailable') : t('pwa.offlineReady')}
           </p>
           <p className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
             {needRefresh ? (
-              'A new version has been downloaded.'
+              t('pwa.updateBody')
             ) : (
               <>
-                <WifiOff size={11} className="shrink-0" /> Sudoku Prime now works without internet.
+                <WifiOff size={11} className="shrink-0" /> {t('pwa.offlineBody')}
               </>
             )}
           </p>
@@ -70,13 +83,13 @@ export function PwaStatus() {
             onClick={() => updateServiceWorker(true)}
             className="shrink-0 rounded-xl bg-brand-500 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-600 active:scale-95"
           >
-            Reload
+            {t('pwa.reload')}
           </button>
         )}
 
         <button
           onClick={close}
-          aria-label="Dismiss"
+          aria-label={t('pwa.dismiss')}
           className="shrink-0 rounded-lg p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700 dark:hover:text-slate-300"
         >
           <X size={16} />

@@ -45,6 +45,7 @@ export type ProgressMap = Record<number, LevelProgress>;
 
 export interface ActiveGameSnapshot {
   levelId: number;
+  seed?: number;
   puzzle: Grid;
   solution: Grid;
   cells: {
@@ -76,3 +77,18 @@ export interface AchievementProgress {
 export type AchievementsMap = Record<string, AchievementProgress>;
 
 export type ThemeMode = 'light' | 'dark';
+
+export type ColorTheme = 'default' | 'sakura' | 'ocean' | 'neon' | 'sunset';
+
+export type GameMessageTone = 'hint' | 'coach' | 'mistake';
+
+export interface GameMessage {
+  text: string;
+  tone: GameMessageTone;
+}
+
+export interface ConflictHighlight {
+  kind: 'row' | 'col' | 'box';
+  row: number;
+  col: number;
+}

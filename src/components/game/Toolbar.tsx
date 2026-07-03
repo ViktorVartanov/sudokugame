@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Undo2, PenLine, Lightbulb, Eraser } from 'lucide-react';
 import { useGameStore, MAX_HINTS } from '../../store/useGameStore';
+import { useT } from '../../lib/i18n';
 import { cn } from '../../lib/utils';
 
 interface ToolbarButtonProps {
@@ -44,27 +45,28 @@ export function Toolbar() {
   const hintsUsed = useGameStore((state) => state.hintsUsed);
   const eraseSelectedCell = useGameStore((state) => state.eraseSelectedCell);
   const selected = useGameStore((state) => state.selected);
+  const t = useT();
 
   const hintsRemaining = MAX_HINTS - hintsUsed;
 
   return (
     <div className="mx-auto flex w-full max-w-[min(92vw,32rem)] gap-1 rounded-2xl bg-white p-1.5 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800/60 dark:ring-slate-700">
-      <ToolbarButton icon={<Undo2 size={20} />} label="Undo" disabled={historyLength === 0} onClick={undo} />
+      <ToolbarButton icon={<Undo2 size={20} />} label={t('toolbar.undo')} disabled={historyLength === 0} onClick={undo} />
       <ToolbarButton
         icon={<Eraser size={20} />}
-        label="Erase"
+        label={t('toolbar.erase')}
         disabled={!selected}
         onClick={eraseSelectedCell}
       />
       <ToolbarButton
         icon={<PenLine size={20} />}
-        label="Notes"
+        label={t('toolbar.notes')}
         active={notesMode}
         onClick={toggleNotesMode}
       />
       <ToolbarButton
         icon={<Lightbulb size={20} />}
-        label="Hint"
+        label={t('toolbar.hint')}
         badge={String(hintsRemaining)}
         disabled={hintsRemaining <= 0}
         onClick={useHint}

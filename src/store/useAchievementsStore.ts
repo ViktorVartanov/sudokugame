@@ -8,6 +8,7 @@ interface AchievementsState {
   unlocked: AchievementsMap;
   /** Evaluates a win, persists any newly-unlocked achievements, and returns their ids. */
   checkForNewAchievements: (ctx: AchievementContext) => string[];
+  resetAchievements: () => void;
 }
 
 export const useAchievementsStore = create<AchievementsState>()(
@@ -28,6 +29,8 @@ export const useAchievementsStore = create<AchievementsState>()(
         set({ unlocked: updated });
         return newIds;
       },
+
+      resetAchievements: () => set({ unlocked: createEmptyAchievementsMap() }),
     }),
     {
       name: STORAGE_KEYS.achievements,

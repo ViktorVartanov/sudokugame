@@ -18,6 +18,7 @@ interface ProgressState {
   totalMistakesMade: number;
   recordWin: (result: WinResult) => { allLevelsCompleted: boolean; totalWinsAfterThis: number };
   getLevelProgress: (levelId: number) => LevelProgress;
+  resetProgress: () => void;
 }
 
 function defaultProgress(): LevelProgress {
@@ -62,6 +63,8 @@ export const useProgressStore = create<ProgressState>()(
 
         return { allLevelsCompleted, totalWinsAfterThis };
       },
+
+      resetProgress: () => set({ levels: {}, totalWins: 0, totalTimePlayedSeconds: 0, totalMistakesMade: 0 }),
     }),
     { name: STORAGE_KEYS.progress },
   ),

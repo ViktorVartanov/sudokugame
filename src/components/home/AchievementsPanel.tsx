@@ -1,6 +1,7 @@
 import { Trophy, Sparkles, Zap, Crown, Medal, Flame, Lock, type LucideIcon } from 'lucide-react';
 import { ACHIEVEMENTS } from '../../lib/achievements';
 import { useAchievementsStore } from '../../store/useAchievementsStore';
+import { useT } from '../../lib/i18n';
 import { cn } from '../../lib/utils';
 
 const ICONS: Record<string, LucideIcon> = {
@@ -15,11 +16,12 @@ const ICONS: Record<string, LucideIcon> = {
 export function AchievementsPanel() {
   const unlocked = useAchievementsStore((state) => state.unlocked);
   const unlockedCount = ACHIEVEMENTS.filter((a) => unlocked[a.id]?.unlocked).length;
+  const t = useT();
 
   return (
     <section className="px-4 pb-12 sm:px-8">
       <div className="mb-6 flex items-baseline justify-between">
-        <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white">Achievements</h2>
+        <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white">{t('achievements.title')}</h2>
         <span className="text-sm font-medium text-slate-400">
           {unlockedCount} / {ACHIEVEMENTS.length}
         </span>
@@ -33,7 +35,7 @@ export function AchievementsPanel() {
           return (
             <div
               key={achievement.id}
-              title={achievement.description}
+              title={t(`achievement.${achievement.id}.description`)}
               style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
               className={cn(
                 'flex animate-fade-up flex-col items-center gap-2 rounded-2xl p-4 text-center transition-all duration-300 hover:-translate-y-1',
@@ -58,7 +60,7 @@ export function AchievementsPanel() {
                   isUnlocked ? 'text-slate-800 dark:text-slate-100' : 'text-slate-400 dark:text-slate-500',
                 )}
               >
-                {achievement.title}
+                {t(`achievement.${achievement.id}.title`)}
               </p>
             </div>
           );
