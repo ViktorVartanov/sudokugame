@@ -13,6 +13,7 @@ import { useProgressStore } from './store/useProgressStore';
 import { applyColorTheme } from './lib/themes';
 import { isLevelUnlocked } from './lib/storyWorlds';
 import { parseCurrentRoute, clearRouteFromUrl } from './lib/deepLinks';
+import { getTodayDateString } from './lib/dailyChallenge';
 
 type View = 'home' | 'game' | 'stats' | 'settings' | 'online' | 'battle-invite' | 'result';
 
@@ -67,6 +68,17 @@ function App() {
     setView('game');
   };
 
+  const handlePlayDaily = () => {
+    const dateString = getTodayDateString();
+    const { getSavedDailyChallengeDate, resumeSavedGame, startDailyChallenge } = useGameStore.getState();
+    if (getSavedDailyChallengeDate() === dateString) {
+      resumeSavedGame();
+    } else {
+      startDailyChallenge(dateString);
+    }
+    setView('game');
+  };
+
   return (
     <>
       <PwaStatus />
@@ -77,6 +89,7 @@ function App() {
             onOpenStats={() => setView('stats')}
             onOpenSettings={() => setView('settings')}
             onOpenOnline={() => setView('online')}
+            onPlayDaily={handlePlayDaily}
           />
         )}
         {view === 'game' && (

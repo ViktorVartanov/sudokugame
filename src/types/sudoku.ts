@@ -60,6 +60,8 @@ export interface ActiveGameSnapshot {
   notesMode: boolean;
   isComplete: boolean;
   startedAt: number;
+  isDailyChallenge?: boolean;
+  dailyChallengeDate?: string;
 }
 
 export interface AchievementDefinition {

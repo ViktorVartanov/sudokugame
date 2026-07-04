@@ -29,6 +29,8 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
 
   const levelId = useGameStore((state) => state.levelId);
   const startedAt = useGameStore((state) => state.startedAt);
+  const isDailyChallenge = useGameStore((state) => state.isDailyChallenge);
+  const restartPuzzle = useGameStore((state) => state.restartPuzzle);
   const useLevelVisual = useSettingsStore((state) => state.useLevelVisual);
   const colorTheme = useSettingsStore((state) => state.colorTheme);
   const themeSounds = useSettingsStore((state) => state.themeSounds);
@@ -70,7 +72,10 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
 
   if (levelId === null) return null;
 
-  const isFinalLevel = levelId === 10;
+  // A daily challenge borrows a real level's difficulty/world for variety
+  // (see lib/dailyChallenge.ts), so it can land on levelId 10 — guard against
+  // that accidentally triggering the whole-campaign Grandmaster ending.
+  const isFinalLevel = levelId === 10 && !isDailyChallenge;
   const world = getStoryWorld(levelId);
 
   return (
@@ -134,7 +139,12 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
       ) : (
         <VictoryModal
           onBack={onBack}
-          onPlayAgain={() => onSelectLevel(levelId)}
+          // A daily challenge replays the exact same puzzle (to compare
+          // times on an identical board) instead of routing through
+          // onSelectLevel, which would both generate a fresh random puzzle
+          // and could silently no-op if that day's borrowed difficulty
+          // happens to be a level the player hasn't actually unlocked yet.
+          onPlayAgain={() => (isDailyChallenge ? restartPuzzle() : onSelectLevel(levelId))}
           onNextLevel={() => onSelectLevel(Math.min(levelId + 1, 10))}
         />
       )}

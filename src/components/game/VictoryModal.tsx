@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useGameStore } from '../../store/useGameStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
+import { useDailyChallengeStore } from '../../store/useDailyChallengeStore';
 import { getDifficultyLevel, DIFFICULTY_LEVELS } from '../../lib/difficulty';
 import { getStoryWorld } from '../../lib/storyWorlds';
 import { ACHIEVEMENTS } from '../../lib/achievements';
@@ -56,6 +57,7 @@ interface VictoryModalProps {
 
 export function VictoryModal({ onBack, onPlayAgain, onNextLevel }: VictoryModalProps) {
   const levelId = useGameStore((state) => state.levelId);
+  const isDailyChallenge = useGameStore((state) => state.isDailyChallenge);
   const isComplete = useGameStore((state) => state.isComplete);
   const elapsedSeconds = useGameStore((state) => state.elapsedSeconds);
   const mistakes = useGameStore((state) => state.mistakes);
@@ -66,6 +68,7 @@ export function VictoryModal({ onBack, onPlayAgain, onNextLevel }: VictoryModalP
   const useLevelVisual = useSettingsStore((state) => state.useLevelVisual);
   const nickname = useSettingsStore((state) => state.nickname);
   const avatarEmoji = useSettingsStore((state) => state.avatarEmoji);
+  const dailyStreak = useDailyChallengeStore((state) => state.getStreak());
   const t = useT();
   const { share, label: shareLabel } = useShareResult();
 
@@ -77,8 +80,8 @@ export function VictoryModal({ onBack, onPlayAgain, onNextLevel }: VictoryModalP
 
   const level = getDifficultyLevel(levelId);
   const world = getStoryWorld(levelId);
-  const hasNextLevel = levelId < DIFFICULTY_LEVELS.length;
-  const VictoryIcon = useLevelVisual ? (WORLD_ICONS[world.victoryIcon] ?? Trophy) : Trophy;
+  const hasNextLevel = levelId < DIFFICULTY_LEVELS.length && !isDailyChallenge;
+  const VictoryIcon = isDailyChallenge ? Flame : useLevelVisual ? (WORLD_ICONS[world.victoryIcon] ?? Trophy) : Trophy;
 
   const handleShare = () => {
     const resultUrl = buildResultUrl({
@@ -101,21 +104,36 @@ export function VictoryModal({ onBack, onPlayAgain, onNextLevel }: VictoryModalP
         <div
           className={cn(
             'flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br shadow-lg animate-pop',
-            useLevelVisual ? world.gradient : 'from-amber-300 to-orange-500',
-            useLevelVisual ? world.glow : 'shadow-orange-500/40',
+            isDailyChallenge
+              ? 'from-orange-400 to-rose-500 shadow-orange-500/40'
+              : useLevelVisual
+                ? world.gradient
+                : 'from-amber-300 to-orange-500',
+            !isDailyChallenge && (useLevelVisual ? world.glow : 'shadow-orange-500/40'),
           )}
         >
           <VictoryIcon size={38} className="text-white" />
         </div>
 
         <h2 className="mt-4 font-display text-2xl font-extrabold text-slate-900 dark:text-white">
-          {t('victory.title')}
+          {isDailyChallenge ? t('daily.victoryTitle') : t('victory.title')}
         </h2>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t('victory.conquered', { level: t(`difficulty.${level.key}.name`) })}
+          {isDailyChallenge
+            ? t('daily.victorySubtitle')
+            : t('victory.conquered', { level: t(`difficulty.${level.key}.name`) })}
         </p>
 
         <StarRating stars={completion.stars} size={28} className="mt-4" />
+
+        {isDailyChallenge && (
+          <div className="mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-orange-50 to-rose-50 py-3 ring-1 ring-orange-200/70 dark:from-orange-500/10 dark:to-rose-500/10 dark:ring-orange-500/20">
+            <Flame size={18} className="text-orange-500" />
+            <p className="font-display text-sm font-bold text-slate-800 dark:text-slate-100">
+              {t('daily.streakCount', { count: dailyStreak })}
+            </p>
+          </div>
+        )}
 
         {activeBattleContext?.creatorResult && (
           <div className="mt-4 w-full rounded-2xl bg-gradient-to-br from-rose-50 to-orange-50 p-4 text-left ring-1 ring-rose-200/70 dark:from-rose-500/10 dark:to-orange-500/10 dark:ring-rose-500/20">
@@ -213,7 +231,7 @@ export function VictoryModal({ onBack, onPlayAgain, onNextLevel }: VictoryModalP
               {t('victory.playAgain')}
             </Button>
             <Button variant="secondary" onClick={onBack}>
-              {t('victory.allLevels')}
+              {isDailyChallenge ? t('gameHeader.back') : t('victory.allLevels')}
             </Button>
           </div>
         </div>

@@ -25,9 +25,11 @@ import {
 import { readStorage, removeStorage, writeStorage, STORAGE_KEYS } from '../lib/storage';
 import { playCorrectSound, playWrongSound, playBoxCompleteSound, playVictorySound } from '../lib/sounds';
 import type { Language } from '../lib/i18n';
+import { getDailyLevelId, getDailySeed } from '../lib/dailyChallenge';
 import { useProgressStore } from './useProgressStore';
 import { useAchievementsStore } from './useAchievementsStore';
 import { useSettingsStore } from './useSettingsStore';
+import { useDailyChallengeStore } from './useDailyChallengeStore';
 
 const COACH_COOLDOWN_MS = 20_000;
 const COACH_TIP_CHANCE = 0.6;
@@ -91,12 +93,17 @@ interface GameState {
 
   /** Set when the active game was started from a battle invite; drives the post-game comparison UI. */
   activeBattleContext: BattleContext | null;
+  /** Set when the active game is today's (or a resumed) daily challenge — routes completion to useDailyChallengeStore instead of the normal per-level progress, and suppresses next-level/grandmaster UI. */
+  isDailyChallenge: boolean;
+  dailyChallengeDate: string | null;
 
   startNewGame: (levelId: number, seed?: number) => void;
   startBattleGame: (levelId: number, seed: number, context: BattleContext) => void;
+  startDailyChallenge: (dateString: string) => void;
   resumeSavedGame: () => boolean;
   discardSavedGame: () => void;
   getSavedLevelId: () => number | null;
+  getSavedDailyChallengeDate: () => string | null;
 
   selectCell: (row: number, col: number) => void;
   inputNumber: (digit: number) => void;
@@ -139,6 +146,8 @@ function persistSnapshot(state: GameState) {
     notesMode: state.notesMode,
     isComplete: state.isComplete,
     startedAt: state.startedAt,
+    isDailyChallenge: state.isDailyChallenge,
+    dailyChallengeDate: state.dailyChallengeDate ?? undefined,
   };
   writeStorage(STORAGE_KEYS.activeGame, snapshot);
 }
@@ -278,6 +287,8 @@ export const useGameStore = create<GameState>()((set, get) => ({
   conflictHighlightId: 0,
   lastCoachMessageAt: 0,
   activeBattleContext: null,
+  isDailyChallenge: false,
+  dailyChallengeDate: null,
 
   startNewGame: (levelId, seed) => {
     const actualSeed = seed ?? generateSeed();
@@ -309,6 +320,8 @@ export const useGameStore = create<GameState>()((set, get) => ({
       hintAnalysis: null,
       conflictHighlight: null,
       activeBattleContext: null,
+      isDailyChallenge: false,
+      dailyChallengeDate: null,
     });
     persistSnapshot(get());
   },
@@ -316,6 +329,14 @@ export const useGameStore = create<GameState>()((set, get) => ({
   startBattleGame: (levelId, seed, context) => {
     get().startNewGame(levelId, seed);
     set({ activeBattleContext: context });
+  },
+
+  startDailyChallenge: (dateString) => {
+    const levelId = getDailyLevelId(dateString);
+    const seed = getDailySeed(dateString);
+    get().startNewGame(levelId, seed);
+    set({ isDailyChallenge: true, dailyChallengeDate: dateString });
+    persistSnapshot(get());
   },
 
   resumeSavedGame: () => {
@@ -355,6 +376,8 @@ export const useGameStore = create<GameState>()((set, get) => ({
       hintAnalysis: null,
       conflictHighlight: null,
       activeBattleContext: null,
+      isDailyChallenge: snapshot.isDailyChallenge ?? false,
+      dailyChallengeDate: snapshot.dailyChallengeDate ?? null,
     });
     return true;
   },
@@ -363,8 +386,14 @@ export const useGameStore = create<GameState>()((set, get) => ({
 
   getSavedLevelId: () => {
     const snapshot = readStorage<ActiveGameSnapshot | null>(STORAGE_KEYS.activeGame, null);
-    if (!snapshot || snapshot.isComplete) return null;
+    if (!snapshot || snapshot.isComplete || snapshot.isDailyChallenge) return null;
     return snapshot.levelId;
+  },
+
+  getSavedDailyChallengeDate: () => {
+    const snapshot = readStorage<ActiveGameSnapshot | null>(STORAGE_KEYS.activeGame, null);
+    if (!snapshot || snapshot.isComplete || !snapshot.isDailyChallenge) return null;
+    return snapshot.dailyChallengeDate ?? null;
   },
 
   selectCell: (row, col) => {
@@ -606,6 +635,33 @@ function completeGame(set: (partial: Partial<GameState>) => void, get: () => Gam
   if (useSettingsStore.getState().soundEffects) playVictorySound();
 
   const stars = calculateStars({ mistakes: state.mistakes, hintsUsed: state.hintsUsed });
+
+  // Daily challenges never touch per-level progress/achievements — that
+  // would corrupt a real level's best time/stars with whatever random
+  // difficulty the daily happened to use that day. They get their own
+  // completely separate history/streak tracking instead.
+  if (state.isDailyChallenge && state.dailyChallengeDate) {
+    const previousBest = useDailyChallengeStore.getState().getBestTime();
+    useDailyChallengeStore.getState().recordCompletion(state.dailyChallengeDate, {
+      timeSeconds: state.elapsedSeconds,
+      mistakes: state.mistakes,
+      hintsUsed: state.hintsUsed,
+      stars,
+      completedAt: Date.now(),
+    });
+    set({
+      isComplete: true,
+      selected: null,
+      completion: {
+        stars,
+        isNewBestTime: previousBest === null || state.elapsedSeconds < previousBest,
+        newAchievements: [],
+      },
+    });
+    removeStorage(STORAGE_KEYS.activeGame);
+    return;
+  }
+
   const previousBest = useProgressStore.getState().getLevelProgress(state.levelId).bestTimeSeconds;
   const { allLevelsCompleted, totalWinsAfterThis } = useProgressStore.getState().recordWin({
     levelId: state.levelId,

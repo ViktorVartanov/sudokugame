@@ -1,4 +1,4 @@
-import { ArrowLeft, Pause, Play, RotateCcw, Timer, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Pause, Play, RotateCcw, Timer, AlertTriangle, Flame } from 'lucide-react';
 import { useGameStore } from '../../store/useGameStore';
 import { useSettingsStore } from '../../store/useSettingsStore';
 import { getDifficultyLevel } from '../../lib/difficulty';
@@ -11,6 +11,7 @@ interface GameHeaderProps {
 
 export function GameHeader({ onBack }: GameHeaderProps) {
   const levelId = useGameStore((state) => state.levelId);
+  const isDailyChallenge = useGameStore((state) => state.isDailyChallenge);
   const elapsedSeconds = useGameStore((state) => state.elapsedSeconds);
   const mistakes = useGameStore((state) => state.mistakes);
   const isPaused = useGameStore((state) => state.isPaused);
@@ -34,14 +35,20 @@ export function GameHeader({ onBack }: GameHeaderProps) {
       </button>
 
       <div className="flex flex-col items-center">
-        <span
-          className={cn(
-            'bg-gradient-to-r bg-clip-text text-sm font-bold text-transparent',
-            level.gradient,
-          )}
-        >
-          {t(`difficulty.${level.key}.name`)}
-        </span>
+        {isDailyChallenge ? (
+          <span className="flex items-center gap-1 bg-gradient-to-r from-orange-500 to-rose-500 bg-clip-text text-sm font-bold text-transparent">
+            <Flame size={13} className="text-orange-500" /> {t('daily.badge')}
+          </span>
+        ) : (
+          <span
+            className={cn(
+              'bg-gradient-to-r bg-clip-text text-sm font-bold text-transparent',
+              level.gradient,
+            )}
+          >
+            {t(`difficulty.${level.key}.name`)}
+          </span>
+        )}
         <div className="mt-0.5 flex items-center gap-3 text-xs font-medium text-slate-500 dark:text-slate-400">
           {showTimer && (
             <span className="flex items-center gap-1">

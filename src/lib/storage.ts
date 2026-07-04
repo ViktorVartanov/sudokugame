@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   achievements: `${PREFIX}:achievements`,
   settings: `${PREFIX}:settings`,
   activeGame: `${PREFIX}:active-game`,
+  dailyChallenge: `${PREFIX}:daily-challenge`,
 } as const;
 
 export function readStorage<T>(key: string, fallback: T): T {
