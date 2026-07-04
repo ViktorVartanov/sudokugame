@@ -33,6 +33,10 @@ export function GameBoard() {
   // used for the victory icon) makes each world's frame feel genuinely distinct.
   const frameTexture = useLevelVisual && world ? `frame-${world.motif}` : '';
   const boardGlow = useLevelVisual && world ? world.glow : '';
+  // Neon District's glowing edge (boardGlow) already reads as "the light
+  // source" for that world — an inset bevel on top of it would look like two
+  // competing light sources instead of a coherent material.
+  const useBevel = !!frameTexture && world?.motif !== 'circuit';
 
   useEffect(() => {
     if (boxGlowIndex === null) return;
@@ -60,9 +64,10 @@ export function GameBoard() {
     // with its own background, not a border-color trick.
     <div
       className={cn(
-        'h-full w-full rounded-2xl p-2.5 shadow-xl transition-colors duration-300 animate-fade-up',
+        'h-full w-full rounded-2xl p-3 shadow-xl transition-colors duration-300 animate-fade-up sm:p-4',
         frameTexture || 'bg-slate-300 dark:bg-slate-600',
         boardGlow && `shadow-2xl ${boardGlow}`,
+        useBevel && 'frame-bevel',
       )}
     >
       <div

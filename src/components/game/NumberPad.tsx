@@ -27,9 +27,9 @@ export function NumberPad() {
             disabled={isCompleted}
             onClick={() => inputNumber(digit)}
             className={cn(
-              'relative flex h-14 flex-col items-center justify-center rounded-xl bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all active:scale-90 disabled:active:scale-100 sm:h-16 sm:rounded-2xl',
-              'hover:bg-brand-50 hover:text-brand-600 hover:ring-brand-200',
-              'dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-brand-500/10 dark:hover:text-brand-300',
+              'relative flex h-14 flex-col items-center justify-center rounded-xl bg-brand-50/70 font-bold text-slate-700 shadow-sm ring-1 ring-brand-100 transition-all active:scale-90 disabled:active:scale-100 sm:h-16 sm:rounded-2xl',
+              'hover:bg-brand-100 hover:text-brand-600 hover:ring-brand-200',
+              'dark:bg-brand-500/10 dark:text-slate-200 dark:ring-brand-500/20 dark:hover:bg-brand-500/20 dark:hover:text-brand-300',
               notesMode && isSelectionNoted(digit) && 'ring-2 ring-brand-400',
               isCompleted &&
                 'bg-accent-50 text-accent-600 ring-accent-200 hover:bg-accent-50 hover:text-accent-600 hover:ring-accent-200 dark:bg-accent-500/10 dark:text-accent-400 dark:ring-accent-500/30 dark:hover:bg-accent-500/10 dark:hover:text-accent-400',
@@ -49,7 +49,7 @@ export function NumberPad() {
       <button
         onClick={eraseSelectedCell}
         aria-label={t('toolbar.erase')}
-        className="flex h-14 items-center justify-center rounded-xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-rose-50 hover:text-rose-500 hover:ring-rose-200 active:scale-90 sm:h-16 sm:rounded-2xl dark:bg-slate-800 dark:text-slate-400 dark:ring-slate-700 dark:hover:bg-rose-500/10"
+        className="flex h-14 items-center justify-center rounded-xl bg-brand-50/70 text-slate-500 shadow-sm ring-1 ring-brand-100 transition-all hover:bg-rose-50 hover:text-rose-500 hover:ring-rose-200 active:scale-90 sm:h-16 sm:rounded-2xl dark:bg-brand-500/10 dark:text-slate-400 dark:ring-brand-500/20 dark:hover:bg-rose-500/10"
       >
         <Delete size={16} className="sm:h-5 sm:w-5" />
       </button>

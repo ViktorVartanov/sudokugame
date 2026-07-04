@@ -77,7 +77,7 @@ function CellComponent({
         'active:scale-[0.94]',
         borderRight && 'border-r-2 border-r-slate-300 dark:border-r-slate-500',
         borderBottom && 'border-b-2 border-b-slate-300 dark:border-b-slate-500',
-        isSelected && 'bg-brand-200/70 dark:bg-brand-500/30',
+        isSelected && 'bg-brand-50 ring-2 ring-inset ring-brand-500 dark:bg-brand-500/10 dark:ring-brand-400',
         !isSelected && isSameValue && cell.value !== 0 && 'bg-brand-100/70 dark:bg-brand-500/15',
         !isSelected && !isSameValue && isPeer && 'bg-slate-100/80 dark:bg-slate-800/50',
         !isSelected && !isPeer && !isSameValue && 'bg-white dark:bg-slate-900/40',

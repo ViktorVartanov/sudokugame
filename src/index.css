@@ -6,6 +6,10 @@
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Lexend', 'Inter', system-ui, sans-serif;
+  /* Used only for the in-game level title (GameHeader) — an elegant editorial
+     serif matching the per-world "story book" visual reference, kept scoped
+     to the game screen rather than replacing --font-display everywhere. */
+  --font-serif: 'Playfair Display', 'Lexend', serif;
 
   --color-brand-50: #f2f1ff;
   --color-brand-100: #e6e4ff;
@@ -232,6 +236,21 @@ html.dark body {
     repeating-linear-gradient(-45deg, rgba(var(--noise-rgb), 0.1) 0 3px, transparent 3px 20px);
 }
 
+/* A soft vignette over every motif background, for a bit more "scene" depth
+   without touching any of the 10 pattern declarations above (each already
+   has its own `background-size`, and folding another layer into that list
+   would mean re-tuning all 10). A pseudo-element sidesteps that entirely —
+   GameScreen's root is `position: relative` + `overflow-hidden`, so this
+   paints behind the real children (WorldDecorations, header, board) and
+   stays clipped to the screen. */
+[class*='motif-']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 40%, transparent 45%, rgba(0, 0, 0, 0.12) 100%);
+}
+
 /* Per-world BOARD FRAME textures (see StoryWorld.motif in lib/storyWorlds.ts),
    applied to the padded ring around the board itself, not the page background —
    a color-tinted glow alone read as "the same frame, different color", not a
@@ -325,6 +344,18 @@ html.dark body {
     8px 8px,
     100% 100%;
 }
+/* Layered on top of the pattern classes above to fake physical depth (wood/
+   leather/metal bevel) without real texture images — a light inset highlight
+   on the top-left edge and a darker inset shadow on the bottom-right, as if
+   lit from above. Skipped for the neon-district world, where a glowing edge
+   (already applied via `boardGlow`/world.glow) reads as "neon" — a bevel
+   there would look like a flat frame with in a competing lighting effect. */
+.frame-bevel {
+  box-shadow:
+    inset 2px 2px 5px rgba(255, 255, 255, 0.4),
+    inset -3px -3px 7px rgba(0, 0, 0, 0.4);
+}
+
 .frame-chevron {
   background-image: repeating-linear-gradient(
     45deg,

@@ -87,6 +87,17 @@ export function countCorrectlyPlaced(board: Board, solution: Grid, digit: number
   return count;
 }
 
+/** Counts how many of the 81 cells currently hold their correct digit (givens included) — used for a live "% complete" readout during play. */
+export function countTotalCorrectlyPlaced(board: Board, solution: Grid): number {
+  let count = 0;
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (board[r][c].value !== 0 && board[r][c].value === solution[r][c]) count++;
+    }
+  }
+  return count;
+}
+
 export function getBoxIndex(row: number, col: number): number {
   return Math.floor(row / 3) * 3 + Math.floor(col / 3);
 }
