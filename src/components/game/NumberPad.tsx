@@ -27,7 +27,7 @@ export function NumberPad() {
             disabled={isCompleted}
             onClick={() => inputNumber(digit)}
             className={cn(
-              'relative flex h-14 items-center justify-center rounded-xl bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all active:scale-90 disabled:active:scale-100 sm:h-16 sm:rounded-2xl',
+              'relative flex h-14 flex-col items-center justify-center rounded-xl bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all active:scale-90 disabled:active:scale-100 sm:h-16 sm:rounded-2xl',
               'hover:bg-brand-50 hover:text-brand-600 hover:ring-brand-200',
               'dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-brand-500/10 dark:hover:text-brand-300',
               notesMode && isSelectionNoted(digit) && 'ring-2 ring-brand-400',
@@ -36,8 +36,12 @@ export function NumberPad() {
             )}
           >
             <span className="text-base leading-none sm:text-xl">{digit}</span>
-            {isCompleted && (
-              <Check size={10} className="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5" strokeWidth={3} />
+            {isCompleted ? (
+              <Check size={10} className="mt-0.5" strokeWidth={3} />
+            ) : (
+              <span className="mt-0.5 text-[9px] font-medium leading-none text-slate-400 dark:text-slate-500 sm:text-[10px]">
+                {placed}/9
+              </span>
             )}
           </button>
         );
