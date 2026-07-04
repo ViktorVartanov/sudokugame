@@ -1133,12 +1133,16 @@ html.dark .story-world-card {
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
 }
-.sudoku-cell.cell-idle,
-.sudoku-cell.cell-peer,
-.sudoku-cell.cell-same-value,
-.sudoku-cell.cell-selected {
-  backdrop-filter: blur(6px);
-}
+/* Removed backdrop-filter: blur(6px) that used to sit here on
+   .cell-idle/.cell-peer/.cell-same-value/.cell-selected — each cell's own
+   background (--world-board and its color-mix() variants, see above) is a
+   fully opaque color with no alpha channel in any world, so the blur had
+   nothing translucent to show through and was pure liability: applying
+   backdrop-filter separately to 81 adjacent tiles is a well-known source of
+   visible seams between them (each tile composites its blur independently,
+   and neighboring edges don't blend perfectly) plus 81 extra GPU
+   compositing layers for zero visual benefit — this is what showed up as
+   faint gaps between the numbers on real phones. */
 .sudoku-cell:focus-visible {
   outline: none;
   box-shadow: inset 0 0 0 2px var(--world-accent), 0 0 0 3px rgba(var(--world-glow-rgb), 0.18) !important;

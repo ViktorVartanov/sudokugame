@@ -128,9 +128,24 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
         </div>
 
         <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+          {/* Not `h-full`: combined with `w-full` + `aspect-square`, that
+              forced BOTH dimensions to definite values from two different
+              sources (parent height vs parent width) — aspect-ratio only
+              derives one dimension from the other when just one of them is
+              definite, so with both forced it was silently ignored, and
+              since this flex-1 wrapper's height rarely matches its width,
+              the board rendered as a non-square rectangle. That showed up
+              as CSS Grid auto-sizing 9 ROW tracks to fill the (too-tall)
+              rectangle's height while 9 COLUMN tracks filled its (correct)
+              width — rows ended up visibly taller than columns, i.e. a real
+              gap between every row of digits. `shrink` + the maxWidth/
+              maxHeight caps below are enough on their own: width comes from
+              `w-full` (capped), height is derived from aspect-square, and
+              flex-shrink lets it shrink as one square unit if the flex-1
+              wrapper is shorter than that. */}
           <div
             key={startedAt}
-            className="board-shell relative aspect-square h-full max-h-full w-full"
+            className="board-shell relative aspect-square w-full shrink"
             style={{ maxWidth: 'min(92vw, 32rem)', maxHeight: 'min(56dvh, 32rem)' }}
           >
             <GameBoard />
