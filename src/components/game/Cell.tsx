@@ -73,18 +73,19 @@ function CellComponent({
       data-given={cell.isGiven}
       style={combinedStyle}
       className={cn(
-        'relative flex aspect-square items-center justify-center border-[0.5px] border-slate-200 text-[clamp(0.9rem,4vw,1.35rem)] font-semibold transition-all duration-150 select-none dark:border-slate-700/70',
+        'sudoku-cell relative flex aspect-square items-center justify-center border-[0.5px] border-slate-200 text-[clamp(0.9rem,4vw,1.35rem)] font-semibold transition-all duration-150 select-none dark:border-slate-700/70',
         'active:scale-[0.94]',
-        borderRight && 'border-r-2 border-r-slate-300 dark:border-r-slate-500',
-        borderBottom && 'border-b-2 border-b-slate-300 dark:border-b-slate-500',
-        isSelected && 'bg-brand-50 ring-2 ring-inset ring-brand-500 dark:bg-brand-500/10 dark:ring-brand-400',
-        !isSelected && isSameValue && cell.value !== 0 && 'bg-brand-100/70 dark:bg-brand-500/15',
-        !isSelected && !isSameValue && isPeer && 'bg-slate-100/80 dark:bg-slate-800/50',
-        !isSelected && !isPeer && !isSameValue && 'bg-white dark:bg-slate-900/40',
-        cell.isGiven ? 'text-slate-800 dark:text-slate-100' : 'text-brand-600 dark:text-brand-300',
-        isError && (isRelaxedMistakes ? 'text-amber-500 dark:text-amber-400' : 'text-rose-500 dark:text-rose-400'),
-        cell.wasHinted && 'text-accent-600 dark:text-accent-400',
-        isConflictHighlighted && 'ring-2 ring-inset ring-rose-300 dark:ring-rose-500/60',
+        borderRight && 'border-r-2 border-r-slate-300 dark:border-r-slate-500 cell-border-right',
+        borderBottom && 'border-b-2 border-b-slate-300 dark:border-b-slate-500 cell-border-bottom',
+        isSelected && 'bg-brand-200/70 dark:bg-brand-500/30 cell-selected',
+        !isSelected && isSameValue && cell.value !== 0 && 'bg-brand-100/70 dark:bg-brand-500/15 cell-same-value',
+        !isSelected && !isSameValue && isPeer && 'bg-slate-100/80 dark:bg-slate-800/50 cell-peer',
+        !isSelected && !isPeer && !isSameValue && 'bg-white dark:bg-slate-900/40 cell-idle',
+        cell.isGiven ? 'text-slate-800 dark:text-slate-100 cell-given' : 'text-brand-600 dark:text-brand-300 cell-user',
+        isBoxGlowing && 'cell-box-glowing',
+        isError && (isRelaxedMistakes ? 'text-amber-500 dark:text-amber-400 cell-soft-error' : 'text-rose-500 dark:text-rose-400 cell-error'),
+        cell.wasHinted && 'text-accent-600 dark:text-accent-400 cell-hinted',
+        isConflictHighlighted && 'ring-2 ring-inset ring-rose-300 dark:ring-rose-500/60 cell-conflict',
       )}
     >
       {cell.value !== 0 ? (

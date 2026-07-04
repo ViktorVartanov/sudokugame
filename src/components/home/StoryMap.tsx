@@ -71,7 +71,7 @@ export function StoryMap({ onSelectLevel }: StoryMapProps) {
 
               <div
                 className={cn(
-                  'relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-lg font-bold text-white shadow-lg sm:h-16 sm:w-16',
+                  'story-world-node relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-lg font-bold text-white shadow-lg sm:h-16 sm:w-16',
                   world.gradient,
                   world.glow,
                   !unlocked && 'grayscale opacity-50 shadow-none',
@@ -81,10 +81,11 @@ export function StoryMap({ onSelectLevel }: StoryMapProps) {
               </div>
 
               <button
+                data-world={world.key}
                 onClick={() => unlocked && onSelectLevel(world.levelId)}
                 disabled={!unlocked}
                 className={cn(
-                  'group flex flex-1 flex-col rounded-[24px] bg-white p-4 text-left shadow-sm ring-1 transition-all duration-300 sm:p-5',
+                  'story-world-card group flex flex-1 flex-col rounded-[24px] bg-white p-4 text-left shadow-sm ring-1 transition-all duration-300 sm:p-5',
                   unlocked && 'hover:-translate-y-1 hover:shadow-xl active:translate-y-0 active:scale-[0.99]',
                   isCompleted ? 'ring-emerald-200/70 dark:ring-emerald-500/20' : 'ring-slate-200/80 dark:ring-slate-700/60',
                   'dark:bg-slate-800/60',

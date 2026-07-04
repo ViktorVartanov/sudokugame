@@ -15,7 +15,6 @@ import { NumberPad } from './NumberPad';
 import { VictoryModal } from './VictoryModal';
 import { GrandmasterVictory } from './GrandmasterVictory';
 import { GameMessageBubble } from './GameMessageBubble';
-import { WorldDecorations } from './WorldDecorations';
 
 interface GameScreenProps {
   onBack: () => void;
@@ -82,53 +81,42 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
     <div
       // Not `fixed`: this div sits inside App.tsx's `animate-view-in`
       // wrapper, which has an active CSS `transform` for the 400ms the
-      // view-transition animation runs. A `position: fixed` descendant of
-      // a `transform`ed ancestor is positioned relative to THAT ancestor
-      // instead of the viewport, which read as the level "jumping" into
-      // place instead of smoothly appearing.
+      // view-transition animation runs — a `fixed` descendant of a
+      // `transform`ed ancestor is positioned relative to THAT ancestor
+      // instead of the viewport, reading as the level "jumping" into place.
       //
-      // Not `min-h-screen`: that sets a MINIMUM height, not a cap — when
-      // the message bubble expands (coach tips / mistake explanations),
-      // the screen's natural content height could exceed the viewport, and
-      // with no fixed ceiling the whole PAGE would scroll to reveal it.
+      // Not `min-h-screen`: that's a MINIMUM height, not a cap — when the
+      // message bubble expands, uncapped height would let the whole PAGE
+      // scroll to reveal it.
       //
-      // Not plain `h-dvh` either anymore: `#root` (index.css) already
-      // applies `padding: env(safe-area-inset-*)` on every side, once, at
-      // the stable top-level container. This element used to ALSO apply
-      // its own copy of the same top/bottom safe-area padding on top of
-      // that — doubling the effective inset on a notched phone — while
-      // still claiming a flat `100dvh` height that has no idea its
-      // ancestor already consumed some of that space with padding. On a
-      // real notched device that mismatch made the bottom of this screen
-      // overflow the actual visible viewport by the doubled amount; with
-      // scrolling deliberately locked (see below), that overflow had
-      // nowhere consistent to go, which is the most likely explanation
-      // for the header intermittently rendering under the notch — a desktop
-      // Chrome viewport was never going to reproduce this, since
-      // env(safe-area-inset-*) is just 0 there regardless. Height is now
-      // 100dvh MINUS whatever #root already consumed via its own top/bottom
-      // padding, so there's exactly one source of truth for the safe area,
-      // and this element only adds its own small fixed breathing room on
-      // top of that (not another copy of the inset itself).
-      className={cn('relative flex flex-col overflow-hidden px-4 py-2', useLevelVisual ? `motif-${world.motif}` : 'bg-noise')}
+      // Not plain `h-dvh` + its own copy of the safe-area padding either:
+      // `#root` (index.css) already applies `padding: env(safe-area-inset-*)`
+      // once, at the stable top-level container. Adding a SECOND copy here
+      // doubled the effective inset on a notched phone, while `h-dvh` had no
+      // idea its ancestor already consumed part of that space — with
+      // scrolling locked during gameplay (see below), that mismatch had
+      // nowhere consistent to go, which surfaced as the header intermittently
+      // rendering under the notch on real devices (never reproducible in a
+      // desktop-viewport test, since env(safe-area-inset-*) is just 0 there).
+      // Height is now 100dvh minus whatever #root already consumed, so
+      // there's exactly one source of truth for the safe area.
+      className={cn('premium-game-screen relative flex flex-col overflow-hidden px-4 py-2', useLevelVisual ? [`level-${world.key}`, `motif-${world.motif}`] : 'bg-noise')}
       style={{ height: 'calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))' }}
     >
-      {useLevelVisual && <WorldDecorations world={world} />}
-
       <div className="shrink-0">
         <GameHeader onBack={onBack} />
       </div>
 
-      {/* Previously this whole [board, toolbar, numberpad] group was centered
-          as a block — since header content (world name length, whether the
+      {/* Previously this [board, toolbar, numberpad] group was centered as a
+          block — since header content (world name length, whether the
           level-visual icon shows, etc.) varies per level, that made the
-          numberpad sit at a different height each time. Now the board's
-          OWN wrapper is `flex-1` (it fills whatever space is actually left
-          under the header and centers the board within itself), and the
-          toolbar/numberpad follow it in normal flow — so they always end up
-          the same fixed distance from the screen bottom, regardless of the
-          header, while any leftover space is absorbed around the board
-          itself rather than shifting the toolbar/numberpad around. */}
+          toolbar/numberpad sit at a different height on different levels.
+          The board's OWN wrapper is now flex-1 (it fills whatever space is
+          actually left under the header and centers the board within
+          itself), and the toolbar/numberpad follow it in normal flow — so
+          they always land the same fixed distance from the screen bottom,
+          regardless of the header, while any leftover space is absorbed
+          around the board itself. */}
       <div className="relative flex min-h-0 flex-1 flex-col items-center gap-3 py-1 sm:gap-6 sm:py-4">
         {/* Absolutely positioned (out of flex flow) so the board/toolbar below
             are sized identically whether or not a message is showing — a
@@ -142,7 +130,7 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
         <div className="flex min-h-0 w-full flex-1 items-center justify-center">
           <div
             key={startedAt}
-            className="relative aspect-square h-full max-h-full w-full"
+            className="board-shell relative aspect-square h-full max-h-full w-full"
             style={{ maxWidth: 'min(92vw, 32rem)', maxHeight: 'min(56dvh, 32rem)' }}
           >
             <GameBoard />

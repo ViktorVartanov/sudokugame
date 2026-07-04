@@ -17,6 +17,7 @@ const en: Dictionary = {
   'level.notSolvedYet': 'Not solved yet',
   'level.best': 'Best {{time}}',
   'level.resume': 'Resume',
+  'level.number': 'Level {{level}}',
   'level.difficultyAria': 'Difficulty {{tier}} of {{total}}',
 
   'achievements.title': 'Achievements',
@@ -96,13 +97,10 @@ const en: Dictionary = {
   'gameHeader.restart': 'Restart puzzle',
   'gameHeader.resume': 'Resume',
   'gameHeader.pause': 'Pause',
-  'gameHeader.projectedStars': 'Projected star rating',
 
   'toolbar.undo': 'Undo',
   'toolbar.erase': 'Erase',
   'toolbar.notes': 'Notes',
-  'toolbar.notesOn': 'On',
-  'toolbar.notesOff': 'Off',
   'toolbar.hint': 'Hint',
 
   'pause.gamePaused': 'Game paused',
@@ -329,6 +327,7 @@ const ru: Dictionary = {
   'level.notSolvedYet': 'Пока не решено',
   'level.best': 'Лучшее {{time}}',
   'level.resume': 'Продолжить',
+  'level.number': 'Уровень {{level}}',
   'level.difficultyAria': 'Сложность {{tier}} из {{total}}',
 
   'achievements.title': 'Достижения',
@@ -408,13 +407,10 @@ const ru: Dictionary = {
   'gameHeader.restart': 'Начать заново',
   'gameHeader.resume': 'Продолжить',
   'gameHeader.pause': 'Пауза',
-  'gameHeader.projectedStars': 'Предварительный рейтинг звёзд',
 
   'toolbar.undo': 'Отмена',
   'toolbar.erase': 'Стереть',
   'toolbar.notes': 'Заметки',
-  'toolbar.notesOn': 'Вкл',
-  'toolbar.notesOff': 'Выкл',
   'toolbar.hint': 'Подсказка',
 
   'pause.gamePaused': 'Игра на паузе',

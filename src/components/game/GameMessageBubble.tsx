@@ -68,8 +68,8 @@ export function GameMessageBubble() {
         visible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0',
       )}
     >
-      <div className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-full shadow-md', style.iconWrapper)}>
-        <Icon size={18} />
+      <div className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', style.iconWrapper)}>
+        <Icon size={16} />
       </div>
       <div className="min-w-0 flex-1 pt-1">
         <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{displayedMessage.text}</p>

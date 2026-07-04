@@ -22,7 +22,7 @@ export function HomeScreen({
   onOpenLearn,
 }: HomeScreenProps) {
   return (
-    <div className="min-h-screen bg-noise">
+    <div className="premium-home-screen min-h-screen bg-noise">
       <div className="mx-auto max-w-5xl">
         <Header onOpenStats={onOpenStats} onOpenSettings={onOpenSettings} onOpenOnline={onOpenOnline} />
         <DailyChallengeCard onPlay={onPlayDaily} />

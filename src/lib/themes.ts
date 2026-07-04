@@ -82,7 +82,27 @@ export const THEME_VARIABLES: Record<Exclude<ColorTheme, 'default'>, Record<stri
 };
 
 /** The full set of variable names any theme might set, so switching back to 'default' clears all of them. */
-const ALL_VARIABLE_NAMES = Array.from(new Set(Object.values(THEME_VARIABLES).flatMap((vars) => Object.keys(vars))));
+const WORLD_VARIABLE_NAMES = [
+  '--world-bg',
+  '--world-bg-dark',
+  '--world-surface',
+  '--world-surface-soft',
+  '--world-board',
+  '--world-board-alt',
+  '--world-ink',
+  '--world-muted',
+  '--world-line',
+  '--world-heavy-line',
+  '--world-accent',
+  '--world-accent-2',
+  '--world-glow-rgb',
+  '--world-complete-rgb',
+  '--world-shadow',
+];
+
+const ALL_VARIABLE_NAMES = Array.from(
+  new Set([...Object.values(THEME_VARIABLES).flatMap((vars) => Object.keys(vars)), ...WORLD_VARIABLE_NAMES]),
+);
 
 export function applyColorTheme(theme: ColorTheme): void {
   const root = document.documentElement.style;

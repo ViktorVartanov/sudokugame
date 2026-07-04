@@ -29,6 +29,9 @@ function App() {
   const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const theme = useSettingsStore((state) => state.theme);
   const colorTheme = useSettingsStore((state) => state.colorTheme);
+  const battleInvitePayload = route.type === 'battle-invite' && 'payload' in route ? route.payload : null;
+  const resultPayload = route.type === 'result' && 'payload' in route ? route.payload : null;
+
 
   useEffect(() => {
     if (route.type !== null) clearRouteFromUrl();
@@ -114,15 +117,15 @@ function App() {
         {view === 'lesson' && selectedLessonId && (
           <LessonDetailScreen lessonId={selectedLessonId} onBack={() => setView('learn')} />
         )}
-        {view === 'battle-invite' && route.type === 'battle-invite' && (
+        {view === 'battle-invite' && battleInvitePayload && (
           <BattleInviteScreen
-            payload={route.payload}
+            payload={battleInvitePayload}
             onDecline={() => setView('home')}
             onAccepted={() => setView('game')}
           />
         )}
-        {view === 'result' && route.type === 'result' && (
-          <ResultScreen payload={route.payload} onGoHome={() => setView('home')} onStartGame={() => setView('game')} />
+        {view === 'result' && resultPayload && (
+          <ResultScreen payload={resultPayload} onGoHome={() => setView('home')} onStartGame={() => setView('game')} />
         )}
       </div>
     </>
