@@ -51,6 +51,23 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
     return () => stopAmbientSound();
   }, [levelId, useLevelVisual, themeSounds]);
 
+  // Belt-and-suspenders scroll lock: `h-dvh` + `overflow-hidden` on the root
+  // below already stops the page from growing taller than the viewport, but
+  // iOS Safari can still show a brief rubber-band bounce on a vertical swipe
+  // even when there's nothing to actually scroll to. Locking the real
+  // document scroller while this screen is mounted rules that out too.
+  useEffect(() => {
+    const { style } = document.documentElement;
+    const previousOverflow = style.overflow;
+    const previousOverscroll = style.overscrollBehavior;
+    style.overflow = 'hidden';
+    style.overscrollBehavior = 'none';
+    return () => {
+      style.overflow = previousOverflow;
+      style.overscrollBehavior = previousOverscroll;
+    };
+  }, []);
+
   if (levelId === null) return null;
 
   const isFinalLevel = levelId === 10;

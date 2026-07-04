@@ -54,20 +54,20 @@ export function GameMessageBubble() {
   const Icon = style?.icon;
   const visible = !!gameMessage;
 
-  // Always render this wrapper (never mount/unmount based on gameMessage) and
-  // animate `max-height` + opacity instead of toggling display. Popping the
-  // bubble in and out changed the flex column's available height, which
-  // forced the board (sized via `shrink` + `aspect-square`) to immediately
-  // recompute and re-render all 81 cells — visible as a jank/overlap flash.
-  // (An earlier attempt used the CSS Grid `0fr`/`1fr` row-sizing trick, but
-  // Safari doesn't reliably interpolate `fr`-unit grid-template-rows
-  // transitions — it can just snap instantly. `max-height` is universally
-  // supported and actually animates everywhere.)
+  // This wrapper's height is permanently fixed — NOT animated between a
+  // collapsed and expanded state — so the message appearing/disappearing
+  // never changes how much space is left for the board below it. Only the
+  // content's opacity toggles. An earlier version animated max-height
+  // (0 -> 128px), which stopped the board from resizing catastrophically
+  // (a full CSS Grid 0fr/1fr trick had that problem, and before that a
+  // straight mount/unmount had it too), but the board still visibly resized
+  // during that 200ms max-height transition — reserving the space
+  // unconditionally removes the resize entirely, not just makes it smoother.
   return (
     <div
       className={cn(
-        'w-full shrink-0 overflow-hidden transition-[max-height,opacity] duration-200 ease-out',
-        visible ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0',
+        'h-[92px] w-full shrink-0 overflow-hidden transition-opacity duration-200 ease-out',
+        visible ? 'opacity-100' : 'opacity-0',
       )}
     >
       {displayedMessage && style && Icon && (
