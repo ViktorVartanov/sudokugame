@@ -214,6 +214,16 @@ const en: Dictionary = {
   'pwa.reload': 'Reload',
   'pwa.dismiss': 'Dismiss',
 
+  'onboarding.skip': 'Skip',
+  'onboarding.next': 'Next',
+  'onboarding.start': 'Get Started',
+  'onboarding.slide1.title': 'Ten Worlds, One Puzzle at a Time',
+  'onboarding.slide1.description': "From a quiet morning café to the Grandmaster's hall — every level has its own mood, music, and look. Win one to unlock the next.",
+  'onboarding.slide2.title': 'Play Smarter, Not Just Harder',
+  'onboarding.slide2.description': 'Stuck? Smart hints walk you through the logic step by step instead of just handing you the answer. Or head to Learn for real solving techniques.',
+  'onboarding.slide3.title': 'Keep the Streak Alive',
+  'onboarding.slide3.description': 'A new daily challenge every day, achievements to unlock, and a link you can send a friend to race on the exact same puzzle — no account needed.',
+
   'gameMessage.close': 'Close',
   'gameMessage.hintContinue': 'Press "Hint" again to learn more.',
   'gameMessage.hintReveal': 'Press "Hint" again to reveal the answer.',
@@ -523,6 +533,16 @@ const ru: Dictionary = {
   'pwa.offlineBody': 'Sudoku Prime теперь работает без интернета.',
   'pwa.reload': 'Обновить',
   'pwa.dismiss': 'Закрыть',
+
+  'onboarding.skip': 'Пропустить',
+  'onboarding.next': 'Далее',
+  'onboarding.start': 'Начать',
+  'onboarding.slide1.title': 'Десять миров, одна головоломка за раз',
+  'onboarding.slide1.description': 'От тихого утреннего кафе до зала гроссмейстера — у каждого уровня свой характер, музыка и стиль. Пройди один, чтобы открыть следующий.',
+  'onboarding.slide2.title': 'Играй умнее, а не только усерднее',
+  'onboarding.slide2.description': 'Застрял? Умные подсказки объясняют логику шаг за шагом, а не просто дают ответ. А в разделе «Учимся судоку» — настоящие техники решения.',
+  'onboarding.slide3.title': 'Не теряй серию',
+  'onboarding.slide3.description': 'Каждый день — новый челлендж, ачивки за успехи, и ссылка, чтобы посоревноваться с другом на одной и той же головоломке — без регистрации.',
 
   'gameMessage.close': 'Закрыть',
   'gameMessage.hintContinue': 'Нажми «Подсказка» ещё раз, чтобы узнать больше.',

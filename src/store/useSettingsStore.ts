@@ -12,6 +12,8 @@ interface SettingsState {
   /** Shown on shared battle/result links — just a local display name, no account behind it. */
   nickname: string;
   avatarEmoji: string;
+  /** Whether the first-launch onboarding carousel has been shown (skipped or completed either way). */
+  hasSeenOnboarding: boolean;
 
   smartHints: boolean;
   coachMode: boolean;
@@ -31,6 +33,7 @@ interface SettingsState {
   setLanguage: (language: Language) => void;
   setNickname: (nickname: string) => void;
   setAvatarEmoji: (emoji: string) => void;
+  completeOnboarding: () => void;
 
   toggleSmartHints: () => void;
   toggleCoachMode: () => void;
@@ -62,6 +65,7 @@ const DEFAULTS = {
   language: getInitialLanguage(),
   nickname: '',
   avatarEmoji: AVATAR_OPTIONS[0],
+  hasSeenOnboarding: false,
   smartHints: true,
   coachMode: false,
   explainMistakes: false,
@@ -86,6 +90,7 @@ export const useSettingsStore = create<SettingsState>()(
       setLanguage: (language) => set({ language }),
       setNickname: (nickname) => set({ nickname }),
       setAvatarEmoji: (avatarEmoji) => set({ avatarEmoji }),
+      completeOnboarding: () => set({ hasSeenOnboarding: true }),
 
       toggleSmartHints: () => set({ smartHints: !get().smartHints }),
       toggleCoachMode: () => set({ coachMode: !get().coachMode }),
@@ -109,7 +114,14 @@ export const useSettingsStore = create<SettingsState>()(
       toggleThemeSounds: () => set({ themeSounds: !get().themeSounds }),
 
       resetSettings: () =>
-        set({ ...DEFAULTS, theme: get().theme, language: get().language, nickname: get().nickname, avatarEmoji: get().avatarEmoji }),
+        set({
+          ...DEFAULTS,
+          theme: get().theme,
+          language: get().language,
+          nickname: get().nickname,
+          avatarEmoji: get().avatarEmoji,
+          hasSeenOnboarding: get().hasSeenOnboarding,
+        }),
     }),
     {
       name: STORAGE_KEYS.settings,

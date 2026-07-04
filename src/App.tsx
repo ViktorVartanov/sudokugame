@@ -9,6 +9,7 @@ import { ResultScreen } from './components/online/ResultScreen';
 import { LearnScreen } from './components/learn/LearnScreen';
 import { LessonDetailScreen } from './components/learn/LessonDetailScreen';
 import { PwaStatus } from './components/common/PwaStatus';
+import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { useSettingsStore } from './store/useSettingsStore';
 import { useGameStore } from './store/useGameStore';
 import { useProgressStore } from './store/useProgressStore';
@@ -88,6 +89,7 @@ function App() {
   return (
     <>
       <PwaStatus />
+      <OnboardingModal />
       <div key={view} className="animate-view-in">
         {view === 'home' && (
           <HomeScreen
