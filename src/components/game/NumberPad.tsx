@@ -27,7 +27,7 @@ export function NumberPad() {
             disabled={isCompleted}
             onClick={() => inputNumber(digit)}
             className={cn(
-              'relative flex aspect-square items-center justify-center rounded-xl bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all active:scale-90 disabled:active:scale-100 sm:rounded-2xl',
+              'relative flex h-14 items-center justify-center rounded-xl bg-white font-bold text-slate-700 shadow-sm ring-1 ring-slate-200 transition-all active:scale-90 disabled:active:scale-100 sm:h-16 sm:rounded-2xl',
               'hover:bg-brand-50 hover:text-brand-600 hover:ring-brand-200',
               'dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-brand-500/10 dark:hover:text-brand-300',
               notesMode && isSelectionNoted(digit) && 'ring-2 ring-brand-400',
@@ -37,7 +37,7 @@ export function NumberPad() {
           >
             <span className="text-base leading-none sm:text-xl">{digit}</span>
             {isCompleted && (
-              <Check size={10} className="absolute bottom-0.5 right-0.5 sm:bottom-1 sm:right-1" strokeWidth={3} />
+              <Check size={10} className="absolute bottom-1 right-1 sm:bottom-1.5 sm:right-1.5" strokeWidth={3} />
             )}
           </button>
         );
@@ -45,7 +45,7 @@ export function NumberPad() {
       <button
         onClick={eraseSelectedCell}
         aria-label={t('toolbar.erase')}
-        className="flex aspect-square items-center justify-center rounded-xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-rose-50 hover:text-rose-500 hover:ring-rose-200 active:scale-90 sm:rounded-2xl dark:bg-slate-800 dark:text-slate-400 dark:ring-slate-700 dark:hover:bg-rose-500/10"
+        className="flex h-14 items-center justify-center rounded-xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200 transition-all hover:bg-rose-50 hover:text-rose-500 hover:ring-rose-200 active:scale-90 sm:h-16 sm:rounded-2xl dark:bg-slate-800 dark:text-slate-400 dark:ring-slate-700 dark:hover:bg-rose-500/10"
       >
         <Delete size={16} className="sm:h-5 sm:w-5" />
       </button>

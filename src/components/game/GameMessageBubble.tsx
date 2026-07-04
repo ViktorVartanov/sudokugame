@@ -25,6 +25,10 @@ const TONE_STYLES = {
   },
 } as const;
 
+// The parent (GameScreen) positions this whole component `absolute`, out of
+// the flex flow that sizes the board/toolbar — so it can appear and
+// disappear freely without ever affecting their layout, and doesn't need to
+// reserve any space for itself when there's nothing to show.
 export function GameMessageBubble() {
   const gameMessage = useGameStore((state) => state.gameMessage);
   const hintStage = useGameStore((state) => state.hintStage);
@@ -50,54 +54,39 @@ export function GameMessageBubble() {
     return () => clearTimeout(timeout);
   }, [gameMessage]);
 
-  const style = displayedMessage ? TONE_STYLES[displayedMessage.tone] : null;
-  const Icon = style?.icon;
+  if (!displayedMessage) return null;
+
+  const style = TONE_STYLES[displayedMessage.tone];
+  const Icon = style.icon;
   const visible = !!gameMessage;
 
-  // This wrapper's height is permanently fixed — NOT animated between a
-  // collapsed and expanded state — so the message appearing/disappearing
-  // never changes how much space is left for the board below it. Only the
-  // content's opacity toggles. An earlier version animated max-height
-  // (0 -> 128px), which stopped the board from resizing catastrophically
-  // (a full CSS Grid 0fr/1fr trick had that problem, and before that a
-  // straight mount/unmount had it too), but the board still visibly resized
-  // during that 200ms max-height transition — reserving the space
-  // unconditionally removes the resize entirely, not just makes it smoother.
   return (
     <div
       className={cn(
-        'h-[92px] w-full shrink-0 overflow-hidden transition-opacity duration-200 ease-out',
-        visible ? 'opacity-100' : 'opacity-0',
+        'mx-auto flex w-full max-w-[min(92vw,32rem)] items-start gap-2.5 rounded-2xl p-3 shadow-lg ring-1 backdrop-blur-sm transition-all duration-200 ease-out',
+        style.wrapper,
+        visible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0',
       )}
     >
-      {displayedMessage && style && Icon && (
-        <div
-          className={cn(
-            'mx-auto flex w-full max-w-[min(92vw,32rem)] items-start gap-2.5 rounded-2xl p-3 ring-1',
-            style.wrapper,
-          )}
-        >
-          <div className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', style.iconWrapper)}>
-            <Icon size={16} />
-          </div>
-          <div className="min-w-0 flex-1 pt-1">
-            <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{displayedMessage.text}</p>
-            {displayedMessage.tone === 'hint' && hintStage > 0 && hintStage < 3 && (
-              <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{t('gameMessage.hintContinue')}</p>
-            )}
-            {displayedMessage.tone === 'hint' && hintStage >= 3 && (
-              <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{t('gameMessage.hintReveal')}</p>
-            )}
-          </div>
-          <button
-            onClick={dismissGameMessage}
-            aria-label={t('gameMessage.close')}
-            className="shrink-0 rounded-lg p-1 text-slate-400 transition-colors hover:bg-black/5 dark:hover:bg-white/10"
-          >
-            <X size={14} />
-          </button>
-        </div>
-      )}
+      <div className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-xl', style.iconWrapper)}>
+        <Icon size={16} />
+      </div>
+      <div className="min-w-0 flex-1 pt-1">
+        <p className="text-sm font-medium text-slate-700 dark:text-slate-200">{displayedMessage.text}</p>
+        {displayedMessage.tone === 'hint' && hintStage > 0 && hintStage < 3 && (
+          <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{t('gameMessage.hintContinue')}</p>
+        )}
+        {displayedMessage.tone === 'hint' && hintStage >= 3 && (
+          <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{t('gameMessage.hintReveal')}</p>
+        )}
+      </div>
+      <button
+        onClick={dismissGameMessage}
+        aria-label={t('gameMessage.close')}
+        className="shrink-0 rounded-lg p-1 text-slate-400 transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+      >
+        <X size={14} />
+      </button>
     </div>
   );
 }

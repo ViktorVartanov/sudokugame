@@ -104,8 +104,15 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
         <GameHeader onBack={onBack} />
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-3 py-1 sm:gap-6 sm:py-4">
-        <GameMessageBubble />
+      <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-3 py-1 sm:gap-6 sm:py-4">
+        {/* Absolutely positioned (out of flex flow) so the board/toolbar below
+            are sized identically whether or not a message is showing — a
+            coach tip or mistake explanation floats in over the top instead
+            of pushing everything else down or (worse) permanently reserving
+            space for a message that isn't there most of the time. */}
+        <div className="absolute inset-x-0 top-0 z-10 px-0">
+          <GameMessageBubble />
+        </div>
 
         <div
           key={startedAt}
