@@ -109,7 +109,17 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
         <GameHeader onBack={onBack} />
       </div>
 
-      <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-3 py-1 sm:gap-6 sm:py-4">
+      {/* Previously this whole [board, toolbar, numberpad] group was centered
+          as a block — since header content (world name length, whether the
+          level-visual icon shows, etc.) varies per level, that made the
+          numberpad sit at a different height each time. Now the board's
+          OWN wrapper is `flex-1` (it fills whatever space is actually left
+          under the header and centers the board within itself), and the
+          toolbar/numberpad follow it in normal flow — so they always end up
+          the same fixed distance from the screen bottom, regardless of the
+          header, while any leftover space is absorbed around the board
+          itself rather than shifting the toolbar/numberpad around. */}
+      <div className="relative flex min-h-0 flex-1 flex-col items-center gap-3 py-1 sm:gap-6 sm:py-4">
         {/* Absolutely positioned (out of flex flow) so the board/toolbar below
             are sized identically whether or not a message is showing — a
             coach tip or mistake explanation floats in over the top instead
@@ -119,13 +129,15 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
           <GameMessageBubble />
         </div>
 
-        <div
-          key={startedAt}
-          className="relative mx-auto aspect-square w-full min-h-0 shrink"
-          style={{ maxWidth: 'min(92vw, 32rem)', maxHeight: 'min(56dvh, 32rem)' }}
-        >
-          <GameBoard />
-          <PauseOverlay />
+        <div className="flex min-h-0 w-full flex-1 items-center justify-center">
+          <div
+            key={startedAt}
+            className="relative aspect-square h-full max-h-full w-full"
+            style={{ maxWidth: 'min(92vw, 32rem)', maxHeight: 'min(56dvh, 32rem)' }}
+          >
+            <GameBoard />
+            <PauseOverlay />
+          </div>
         </div>
 
         <div className="flex w-full shrink-0 flex-col gap-2 sm:gap-4">
