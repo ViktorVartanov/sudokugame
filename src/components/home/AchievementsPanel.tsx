@@ -21,7 +21,7 @@ export function AchievementsPanel() {
   return (
     <section className="px-4 pb-12 sm:px-8">
       <div className="mb-6 flex items-baseline justify-between">
-        <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white">{t('achievements.title')}</h2>
+        <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-white">{t('achievements.title')}</h2>
         <span className="text-sm font-medium text-slate-400">
           {unlockedCount} / {ACHIEVEMENTS.length}
         </span>
@@ -38,18 +38,20 @@ export function AchievementsPanel() {
               title={t(`achievement.${achievement.id}.description`)}
               style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }}
               className={cn(
-                'flex animate-fade-up flex-col items-center gap-2 rounded-2xl p-4 text-center transition-all duration-300 hover:-translate-y-1',
+                'flex animate-fade-up flex-col items-center gap-2 rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-1',
                 isUnlocked
-                  ? 'bg-gradient-to-br from-amber-50 to-orange-50 ring-1 ring-amber-200 hover:shadow-lg hover:shadow-amber-500/10 dark:from-amber-500/10 dark:to-orange-500/10 dark:ring-amber-400/20'
-                  : 'bg-slate-100/70 ring-1 ring-slate-200/60 dark:bg-slate-800/40 dark:ring-slate-700/40',
+                  ? 'border-amber-200 bg-amber-50/60 dark:border-amber-400/20 dark:bg-amber-500/5'
+                  : 'border-slate-200/60 bg-slate-100/70 dark:border-slate-700/40 dark:bg-slate-800/40',
               )}
             >
+              {/* Circular medallion (matching StoryMap's level nodes),
+                  outlined rather than a filled gradient square. */}
               <div
                 className={cn(
-                  'flex h-11 w-11 items-center justify-center rounded-2xl transition-transform duration-300',
+                  'flex h-11 w-11 items-center justify-center rounded-full border-2 transition-transform duration-300',
                   isUnlocked
-                    ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-md shadow-amber-500/30'
-                    : 'bg-slate-200 text-slate-400 dark:bg-slate-700 dark:text-slate-500',
+                    ? 'border-amber-400 text-amber-600 dark:border-amber-500/60 dark:text-amber-400'
+                    : 'border-slate-300 text-slate-400 dark:border-slate-600 dark:text-slate-500',
                 )}
               >
                 {isUnlocked ? <Icon size={20} /> : <Lock size={18} />}

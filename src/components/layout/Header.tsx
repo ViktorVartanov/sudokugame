@@ -1,4 +1,4 @@
-import { Grid3x3, BarChart3, Settings, Users } from 'lucide-react';
+import { BarChart3, Settings, Users } from 'lucide-react';
 import { ThemeToggle } from './ThemeToggle';
 import { useOnlineStatus } from '../../hooks/useOnlineStatus';
 import { useT } from '../../lib/i18n';
@@ -16,16 +16,15 @@ export function Header({ onOpenStats, onOpenSettings, onOpenOnline }: HeaderProp
 
   return (
     <header className="flex items-center justify-between px-4 py-6 sm:px-8 sm:py-8">
-      <div className="flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-lg shadow-brand-600/30 transition-transform duration-300 hover:rotate-6">
-          <Grid3x3 size={22} strokeWidth={2.5} />
-        </div>
-        <div>
-          <h1 className="font-display text-lg font-bold leading-tight text-slate-900 dark:text-white">
-            Sudoku Prime
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400">{t('header.subtitle')}</p>
-        </div>
+      {/* No gradient icon-square logo mark — a plain serif wordmark reads as
+          a considered typographic choice rather than a generic "app icon in
+          a rounded gradient tile", matching the editorial voice already
+          established on the game screen (Playfair Display level titles). */}
+      <div>
+        <h1 className="font-serif text-2xl font-bold leading-tight text-slate-900 dark:text-white sm:text-3xl">
+          Sudoku Prime
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{t('header.subtitle')}</p>
       </div>
       <div className="flex items-center gap-2">
         {onOpenOnline && (

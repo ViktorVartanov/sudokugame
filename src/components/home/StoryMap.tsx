@@ -23,11 +23,11 @@ export function StoryMap({ onSelectLevel }: StoryMapProps) {
     <section className="px-4 pb-10 sm:px-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white">{t('story.title')}</h2>
+          <h2 className="font-serif text-2xl font-bold text-slate-900 dark:text-white">{t('story.title')}</h2>
           <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">{t('story.subtitle')}</p>
         </div>
 
-        <div className="flex items-center gap-4 rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-200/80 dark:bg-slate-800/60 dark:ring-slate-700/60">
+        <div className="flex items-center gap-4 rounded-2xl border border-slate-200/80 px-4 py-3 dark:border-slate-700/60">
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between gap-3 text-xs font-semibold text-slate-500 dark:text-slate-400">
               <span>{t('level.progress')}</span>
@@ -69,11 +69,14 @@ export function StoryMap({ onSelectLevel }: StoryMapProps) {
                 <div className="absolute left-[27px] top-14 h-[calc(100%-2rem)] w-0.5 bg-slate-200 dark:bg-slate-700 sm:left-[31px]" />
               )}
 
+              {/* Circular medallion, not a rounded-square icon tile — reads
+                  like a numbered stamp/seal rather than a generic gradient
+                  app-icon block, while keeping each world's own color as a
+                  real signal (progression order), not pure decoration. */}
               <div
                 className={cn(
-                  'story-world-node relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-lg font-bold text-white shadow-lg sm:h-16 sm:w-16',
+                  'story-world-node relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold text-white shadow-sm sm:h-16 sm:w-16',
                   world.gradient,
-                  world.glow,
                   !unlocked && 'grayscale opacity-50 shadow-none',
                 )}
               >
@@ -85,16 +88,16 @@ export function StoryMap({ onSelectLevel }: StoryMapProps) {
                 onClick={() => unlocked && onSelectLevel(world.levelId)}
                 disabled={!unlocked}
                 className={cn(
-                  'story-world-card group flex flex-1 flex-col rounded-[24px] bg-white p-4 text-left shadow-sm ring-1 transition-all duration-300 sm:p-5',
-                  unlocked && 'hover:-translate-y-1 hover:shadow-xl active:translate-y-0 active:scale-[0.99]',
-                  isCompleted ? 'ring-emerald-200/70 dark:ring-emerald-500/20' : 'ring-slate-200/80 dark:ring-slate-700/60',
+                  'story-world-card group flex flex-1 flex-col rounded-[24px] border bg-white p-4 text-left transition-all duration-300 sm:p-5',
+                  unlocked && 'hover:-translate-y-1 hover:border-brand-200 active:translate-y-0 active:scale-[0.99]',
+                  isCompleted ? 'border-emerald-200/70 dark:border-emerald-500/20' : 'border-slate-200/80 dark:border-slate-700/60',
                   'dark:bg-slate-800/60',
                   !unlocked && 'opacity-60',
                 )}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <h3 className="font-display text-base font-bold text-slate-900 dark:text-white sm:text-lg">
+                    <h3 className="font-serif text-lg font-bold text-slate-900 dark:text-white sm:text-xl">
                       {t(`story.${world.key}.title`)}
                     </h3>
                     <span
