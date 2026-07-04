@@ -218,7 +218,7 @@ const en: Dictionary = {
   'online.battles.status.completed': 'Completed',
 
 
-  'invite.copyLink': 'Copy Link',
+  'invite.copyLink': 'Copy',
   'invite.linkCopied': 'Link copied!',
   'invite.shareLink': 'Share Link',
   'invite.generate': 'Generate Invite Link',
@@ -469,7 +469,7 @@ const ru: Dictionary = {
   'online.battles.status.completed': 'Завершено',
 
 
-  'invite.copyLink': 'Скопировать ссылку',
+  'invite.copyLink': 'Копировать',
   'invite.linkCopied': 'Ссылка скопирована!',
   'invite.shareLink': 'Поделиться ссылкой',
   'invite.generate': 'Создать ссылку-приглашение',

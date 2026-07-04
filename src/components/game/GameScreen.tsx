@@ -58,16 +58,22 @@ export function GameScreen({ onBack, onSelectLevel, onOpenStats }: GameScreenPro
 
   return (
     <div
-      // min-h-screen (not fixed inset-0): this div sits inside App.tsx's
-      // `animate-view-in` wrapper, which has an active CSS `transform` for
-      // the 400ms the view-transition animation runs. A `position: fixed`
-      // descendant of a `transform`ed ancestor is positioned relative to
-      // THAT ancestor instead of the viewport — so for exactly the window
-      // where the level is entering, this screen's "fixed" positioning was
-      // silently anchored to the animating (moving/scaling) wrapper rather
-      // than the viewport, which reads as the level "jumping" into place
-      // instead of smoothly appearing.
-      className={cn('relative min-h-screen flex flex-col overflow-hidden px-4', useLevelVisual ? `motif-${world.motif}` : 'bg-noise')}
+      // h-dvh, not fixed inset-0 and not min-h-screen:
+      // - Not `fixed`: this div sits inside App.tsx's `animate-view-in`
+      //   wrapper, which has an active CSS `transform` for the 400ms the
+      //   view-transition animation runs. A `position: fixed` descendant of
+      //   a `transform`ed ancestor is positioned relative to THAT ancestor
+      //   instead of the viewport, which read as the level "jumping" into
+      //   place instead of smoothly appearing.
+      // - Not `min-h-screen`: that sets a MINIMUM height, not a cap — when
+      //   the message bubble expands (coach tips / mistake explanations),
+      //   the screen's natural content height could exceed the viewport,
+      //   and with no fixed ceiling the whole PAGE would scroll to reveal
+      //   it. `h-dvh` (an actual height, capped to the real visible mobile
+      //   viewport) combined with `overflow-hidden` clips any overflow
+      //   instead of scrolling — the board just shrinks to fit via the
+      //   inner flex/shrink layout, and the screen itself never moves.
+      className={cn('relative h-dvh flex flex-col overflow-hidden px-4', useLevelVisual ? `motif-${world.motif}` : 'bg-noise')}
       style={{
         paddingTop: 'max(0.5rem, env(safe-area-inset-top))',
         paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))',
