@@ -6,6 +6,8 @@ import { SettingsScreen } from './components/settings/SettingsScreen';
 import { OnlineScreen } from './components/online/OnlineScreen';
 import { BattleInviteScreen } from './components/online/BattleInviteScreen';
 import { ResultScreen } from './components/online/ResultScreen';
+import { LearnScreen } from './components/learn/LearnScreen';
+import { LessonDetailScreen } from './components/learn/LessonDetailScreen';
 import { PwaStatus } from './components/common/PwaStatus';
 import { useSettingsStore } from './store/useSettingsStore';
 import { useGameStore } from './store/useGameStore';
@@ -15,7 +17,7 @@ import { isLevelUnlocked } from './lib/storyWorlds';
 import { parseCurrentRoute, clearRouteFromUrl } from './lib/deepLinks';
 import { getTodayDateString } from './lib/dailyChallenge';
 
-type View = 'home' | 'game' | 'stats' | 'settings' | 'online' | 'battle-invite' | 'result';
+type View = 'home' | 'game' | 'stats' | 'settings' | 'online' | 'battle-invite' | 'result' | 'learn' | 'lesson';
 
 function App() {
   const [route] = useState(() => parseCurrentRoute());
@@ -24,6 +26,7 @@ function App() {
     if (route.type === 'result') return 'result';
     return 'home';
   });
+  const [selectedLessonId, setSelectedLessonId] = useState<string | null>(null);
   const theme = useSettingsStore((state) => state.theme);
   const colorTheme = useSettingsStore((state) => state.colorTheme);
 
@@ -90,6 +93,7 @@ function App() {
             onOpenSettings={() => setView('settings')}
             onOpenOnline={() => setView('online')}
             onPlayDaily={handlePlayDaily}
+            onOpenLearn={() => setView('learn')}
           />
         )}
         {view === 'game' && (
@@ -98,6 +102,18 @@ function App() {
         {view === 'stats' && <StatsScreen onBack={() => setView('home')} />}
         {view === 'settings' && <SettingsScreen onBack={() => setView('home')} />}
         {view === 'online' && <OnlineScreen onBack={() => setView('home')} onStartGame={handleStartOwnGame} />}
+        {view === 'learn' && (
+          <LearnScreen
+            onBack={() => setView('home')}
+            onSelectLesson={(id) => {
+              setSelectedLessonId(id);
+              setView('lesson');
+            }}
+          />
+        )}
+        {view === 'lesson' && selectedLessonId && (
+          <LessonDetailScreen lessonId={selectedLessonId} onBack={() => setView('learn')} />
+        )}
         {view === 'battle-invite' && route.type === 'battle-invite' && (
           <BattleInviteScreen
             payload={route.payload}
