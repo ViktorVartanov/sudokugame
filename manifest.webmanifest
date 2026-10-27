@@ -1,0 +1,16 @@
+{
+  "name": "Судоку «Десять ступеней»",
+  "short_name": "Судоку",
+  "description": "Десять ступеней от разминки до гроссмейстера",
+  "lang": "ru",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0204",
+  "theme_color": "#0A0204",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
